@@ -53,7 +53,7 @@ void runDeviceFunnels({
       ? funnels.where((f) => f.tags.contains(tag)).toList()
       : funnels;
 
-  final yamlName = yamlPath.split('/').last.replaceAll('.yaml', '');
+  final yamlName = yamlPath?.split('/').last.replaceAll('.yaml', '') ?? 'device_funnels';
 
   group('Device: $yamlName', () {
     for (final funnel in filtered) {
