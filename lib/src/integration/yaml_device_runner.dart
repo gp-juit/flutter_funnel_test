@@ -38,13 +38,16 @@ import 'funnel_tester.dart';
 /// }
 /// ```
 void runDeviceFunnels({
-  required String yamlPath,
+  String? yamlPath,
+  String? yamlContent,
   required Future<Widget> Function({String? initialRoute}) appBuilder,
   String? tag,
 }) {
+  assert(yamlPath != null || yamlContent != null, 'Provide yamlPath or yamlContent');
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  final file = File(yamlPath);
-  final funnels = parseDeviceFunnels(file.readAsStringSync());
+
+  final content = yamlContent ?? File(yamlPath!).readAsStringSync();
+  final funnels = parseDeviceFunnels(content);
 
   final filtered = tag != null
       ? funnels.where((f) => f.tags.contains(tag)).toList()
