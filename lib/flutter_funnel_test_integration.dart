@@ -14,3 +14,4 @@ export 'flutter_funnel_test.dart';
 // Integration-specific
 export 'src/integration/funnel_tester.dart' show FunnelTester;
 export 'src/integration/step_screenshot.dart' show StepScreenshot;
+export 'src/integration/yaml_device_runner.dart' show runDeviceFunnels;

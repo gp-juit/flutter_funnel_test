@@ -25,9 +25,9 @@ export 'src/funnel/funnel_result.dart' show FunnelResult, StepResult;
 export 'src/funnel/funnel_registry.dart' show FunnelRegistry;
 
 // YAML funnels
-export 'src/yaml/yaml_parser.dart' show parseYamlFunnels;
+export 'src/yaml/yaml_parser.dart' show parseYamlFunnels, parseDeviceFunnels;
 export 'src/yaml/yaml_funnel_definition.dart'
-    show YamlFunnelDefinition, ExpectedEvent;
+    show YamlFunnelDefinition, ExpectedEvent, YamlDeviceFunnel, UiStep;
 export 'src/yaml/yaml_funnel_validator.dart'
     show simulateAndValidateFunnel, validateFunnelAgainstCapture, testYamlFunnels;
 

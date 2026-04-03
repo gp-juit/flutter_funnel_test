@@ -184,3 +184,169 @@ List<String> _extractList(String line, String key) {
       .where((s) => s.isNotEmpty)
       .toList();
 }
+
+// ─── Device Funnel Parser ────────────────────────────────
+
+/// Parse device funnel definitions from YAML.
+///
+/// Format:
+/// ```yaml
+/// device_funnels:
+///   - name: "My Flow"
+///     description: "User does X"
+///     start_route: /home
+///     tags: [feature]
+///     steps:
+///       - name: "Tap QARA"
+///         action: tap_nav
+///         target: "QARA"
+///         expect_event: nav_qara_click
+///         screenshot: qara_screen
+/// ```
+List<YamlDeviceFunnel> parseDeviceFunnels(String yamlContent) {
+  final funnels = <YamlDeviceFunnel>[];
+  final lines = yamlContent.split('\n');
+
+  int i = 0;
+  while (i < lines.length && !lines[i].trimLeft().startsWith('device_funnels:')) {
+    i++;
+  }
+  if (i >= lines.length) return funnels;
+  i++;
+
+  while (i < lines.length) {
+    final trimmed = lines[i].trimLeft();
+    if (trimmed.startsWith('- name:')) {
+      final result = _parseDeviceFunnel(lines, i);
+      if (result != null) {
+        funnels.add(result.funnel);
+        i = result.nextIndex;
+      } else {
+        i++;
+      }
+    } else {
+      i++;
+    }
+  }
+
+  return funnels;
+}
+
+class _DeviceFunnelResult {
+  final YamlDeviceFunnel funnel;
+  final int nextIndex;
+  _DeviceFunnelResult(this.funnel, this.nextIndex);
+}
+
+_DeviceFunnelResult? _parseDeviceFunnel(List<String> lines, int startIndex) {
+  String name = _extractValue(lines[startIndex], 'name:');
+  String description = '';
+  String? startRoute;
+  List<String> tags = [];
+  List<UiStep> steps = [];
+
+  int i = startIndex + 1;
+
+  while (i < lines.length) {
+    final line = lines[i];
+    final trimmed = line.trimLeft();
+    final indent = line.length - line.trimLeft().length;
+
+    if (trimmed.startsWith('- name:') && indent <= 4) break;
+
+    if (trimmed.startsWith('description:')) {
+      description = _extractValue(line, 'description:');
+    } else if (trimmed.startsWith('start_route:')) {
+      startRoute = _extractValue(line, 'start_route:');
+    } else if (trimmed.startsWith('tags:')) {
+      tags = _extractList(line, 'tags:');
+    } else if (trimmed.startsWith('steps:')) {
+      final result = _parseUiSteps(lines, i + 1);
+      steps = result.steps;
+      i = result.nextIndex;
+      continue;
+    }
+    i++;
+  }
+
+  return _DeviceFunnelResult(
+    YamlDeviceFunnel(
+      name: name,
+      description: description,
+      startRoute: startRoute,
+      tags: tags,
+      steps: steps,
+    ),
+    i,
+  );
+}
+
+class _UiStepsResult {
+  final List<UiStep> steps;
+  final int nextIndex;
+  _UiStepsResult(this.steps, this.nextIndex);
+}
+
+_UiStepsResult _parseUiSteps(List<String> lines, int startIndex) {
+  final steps = <UiStep>[];
+  int i = startIndex;
+
+  while (i < lines.length) {
+    final line = lines[i];
+    final trimmed = line.trimLeft();
+    final indent = line.length - line.trimLeft().length;
+
+    if (indent < 6 && trimmed.isNotEmpty && !trimmed.startsWith('#')) break;
+
+    if (trimmed.startsWith('- name:')) {
+      String stepName = _extractValue(line, 'name:');
+      String action = '';
+      String? target;
+      String? value;
+      String? expectEvent;
+      String? expectText;
+      String? screenshot;
+
+      i++;
+      while (i < lines.length) {
+        final sLine = lines[i];
+        final sTrimmed = sLine.trimLeft();
+        final sIndent = sLine.length - sLine.trimLeft().length;
+
+        if (sTrimmed.startsWith('- name:') ||
+            (sIndent < 8 && sTrimmed.isNotEmpty && !sTrimmed.startsWith('#'))) {
+          break;
+        }
+
+        if (sTrimmed.startsWith('action:')) {
+          action = _extractValue(sLine, 'action:');
+        } else if (sTrimmed.startsWith('target:')) {
+          target = _extractValue(sLine, 'target:');
+        } else if (sTrimmed.startsWith('value:')) {
+          value = _extractValue(sLine, 'value:');
+        } else if (sTrimmed.startsWith('expect_event:')) {
+          expectEvent = _extractValue(sLine, 'expect_event:');
+        } else if (sTrimmed.startsWith('expect_text:')) {
+          expectText = _extractValue(sLine, 'expect_text:');
+        } else if (sTrimmed.startsWith('screenshot:')) {
+          screenshot = _extractValue(sLine, 'screenshot:');
+        }
+        i++;
+      }
+
+      steps.add(UiStep(
+        name: stepName,
+        action: action,
+        target: target,
+        value: value,
+        expectEvent: expectEvent,
+        expectText: expectText,
+        screenshot: screenshot,
+      ));
+      continue;
+    }
+    i++;
+  }
+
+  return _UiStepsResult(steps, i);
+}

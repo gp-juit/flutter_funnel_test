@@ -27,3 +27,41 @@ class ExpectedEvent {
     this.description,
   });
 }
+
+/// A UI step parsed from YAML for device testing.
+class UiStep {
+  final String name;
+  final String action; // tap_nav, tap_button, type, scroll_down, wait, screenshot
+  final String? target; // text label, hint, key
+  final String? value;  // text to type
+  final String? expectEvent; // analytics event to assert
+  final String? expectText;  // text to assert visible
+  final String? screenshot;  // screenshot label
+
+  UiStep({
+    required this.name,
+    required this.action,
+    this.target,
+    this.value,
+    this.expectEvent,
+    this.expectText,
+    this.screenshot,
+  });
+}
+
+/// A device funnel parsed from YAML.
+class YamlDeviceFunnel {
+  final String name;
+  final String description;
+  final String? startRoute;
+  final List<String> tags;
+  final List<UiStep> steps;
+
+  YamlDeviceFunnel({
+    required this.name,
+    required this.description,
+    this.startRoute,
+    this.tags = const [],
+    required this.steps,
+  });
+}
