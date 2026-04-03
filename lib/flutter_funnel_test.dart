@@ -29,7 +29,7 @@ export 'src/yaml/yaml_parser.dart' show parseYamlFunnels;
 export 'src/yaml/yaml_funnel_definition.dart'
     show YamlFunnelDefinition, ExpectedEvent;
 export 'src/yaml/yaml_funnel_validator.dart'
-    show simulateAndValidateFunnel, validateFunnelAgainstCapture;
+    show simulateAndValidateFunnel, validateFunnelAgainstCapture, testYamlFunnels;
 
 // Report
 export 'src/report/funnel_report.dart' show FunnelReport;

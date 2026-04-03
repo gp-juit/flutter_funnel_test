@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import '../analytics/analytics_capture.dart';
 import 'yaml_funnel_definition.dart';
+import 'yaml_parser.dart';
 
 /// Simulate a YAML funnel by firing events into [AnalyticsCapture]
 /// and validating the sequence + properties.
@@ -29,6 +31,33 @@ void simulateAndValidateFunnel(YamlFunnelDefinition funnel) {
       );
     }
   }
+}
+
+/// Auto-generate and run tests for every funnel in a YAML file.
+///
+/// Just call this from a test file — no boilerplate needed:
+/// ```dart
+/// import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+///
+/// void main() {
+///   testYamlFunnels('test/funnels/my_funnels.yaml');
+/// }
+/// ```
+void testYamlFunnels(String yamlFilePath, {String? tag}) {
+  final file = File(yamlFilePath);
+  final funnels = parseYamlFunnels(file.readAsStringSync());
+
+  final filtered = tag != null
+      ? funnels.where((f) => f.tags.contains(tag)).toList()
+      : funnels;
+
+  group('Funnels: ${yamlFilePath.split('/').last}', () {
+    for (final funnel in filtered) {
+      test(funnel.name, () {
+        simulateAndValidateFunnel(funnel);
+      });
+    }
+  });
 }
 
 /// Validate a YAML funnel against already-captured events (no simulation).
