@@ -6,234 +6,319 @@
 [![GitHub](https://img.shields.io/badge/GitHub-gp--juit-181717?style=for-the-badge&logo=github)](https://github.com/gp-juit/flutter_funnel_test)
 
 ![Tests](https://img.shields.io/badge/tests-23%20passing-brightgreen?style=flat-square&logo=checkmarx)
-![Coverage](https://img.shields.io/badge/analytics%20coverage-80.6%25-blue?style=flat-square)
 ![Dependencies](https://img.shields.io/badge/external%20deps-0-brightgreen?style=flat-square)
-![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android%20%7C%20Web-lightgrey?style=flat-square)
-![Dart Version](https://img.shields.io/badge/dart-%3E%3D3.0.0-blue?style=flat-square&logo=dart)
-![Flutter Version](https://img.shields.io/badge/flutter-%3E%3D3.10.0-blue?style=flat-square&logo=flutter)
+![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android-lightgrey?style=flat-square)
+![Claude Code](https://img.shields.io/badge/Claude%20Code-AI%20Agent-blueviolet?style=flat-square&logo=anthropic)
 
-> **Analytics-agnostic** | **State management-agnostic** | **Zero external dependencies**
+> **Analytics-agnostic** | **State management-agnostic** | **Zero external dependencies** | **AI Agent included**
 
-A generic framework for testing **UI, business logic, and analytics** across user funnels in any Flutter app.
-
-Define funnels as YAML event sequences, validate analytics fire in the right order with correct properties, and run integration tests on emulators with screenshots — all from one package.
+Test Flutter app funnels by just typing event names in chat. The AI agent handles everything — generates tests, runs on device, records the screen, writes a report.
 
 **Works with any analytics provider** (Mixpanel, Firebase Analytics, Amplitude, PostHog, Segment) and **any state management** (GetX, BLoC, Riverpod, Provider, plain setState).
 
 ---
 
-## Features
+## How It Works
 
-- **YAML Funnel Definitions** — declare funnels as ordered event sequences, no code needed
-- **Analytics Validation** — assert events fire in order with correct properties
-- **Integration Test Helpers** — `FunnelTester` wraps `WidgetTester` with tap, scroll, type, screenshot, and analytics assertions
-- **Coverage Reports** — see which analytics events are tested and which are not
-- **Zero External Dependencies** — built-in YAML parser, only depends on Flutter SDK
-- **Provider Agnostic** — 3-line adapter wiring for any analytics SDK
-- **Extensible** — subclass `FunnelTester` to add app-specific widget finders
+**PM types this in Claude Code:**
+```
+/test-funnel checkout: cart_view -> checkout_start -> payment_success
+```
+
+**Agent does all of this automatically:**
+
+1. Reads your app's analytics events from source code
+2. Maps each event to UI actions (tap button, tap nav, type text)
+3. Generates YAML funnel definition + Dart test files
+4. Starts screen recording on iOS Simulator or Android Emulator
+5. Runs Flutter integration test on device
+6. Stops recording, writes a report
+
+**PM gets:**
+```
+test_reports/
+  funnel_report_2026-04-03_22-09-39.txt      # Pass/fail report
+  funnel_recording_2026-04-03_22-09-39.mp4   # Screen recording
+```
 
 ---
 
-## Quick Start (10 minutes)
+## Features
 
-### 1. Install
+- **AI Agent (Claude Code Skill)** — PM types event names, agent does the rest
+- **Screen Recording** — automatic `.mp4` capture on iOS Simulator and Android Emulator
+- **YAML Funnel Definitions** — declare funnels as ordered event sequences
+- **Auto-Generated Reports** — timestamped `.txt` reports saved to `test_reports/`
+- **Analytics Validation** — assert events fire in order with correct properties
+- **Coverage Reports** — see which analytics events are tested
+- **Zero External Dependencies** — built-in YAML parser, only depends on Flutter SDK
+- **Provider Agnostic** — 3-line adapter for any analytics SDK
+- **`testYamlFunnels()`** — 4-line test file, auto-generates tests from YAML
+
+---
+
+## Setup
+
+### Option A: Install as Claude Code Skill (Recommended)
+
+Copy the `.claude-plugin/`, `skills/`, `commands/`, and `hooks/` directories into your project's `.claude/` folder. On next session start, the hook auto-adds the package to your `pubspec.yaml`.
+
+Then add the 3-line analytics hook (one-time, see [Wire Analytics](#2-wire-your-analytics-3-lines) below).
+
+### Option B: Manual Install
 
 ```yaml
 # pubspec.yaml
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_funnel_test:
     git:
       url: https://github.com/gp-juit/flutter_funnel_test.git
 ```
 
+```bash
+flutter pub get
+```
+
+---
+
+## Quick Start
+
+### 1. Install the Package
+
+Add to `pubspec.yaml` dev_dependencies (or let the skill hook do it):
+
+```yaml
+flutter_funnel_test:
+  git:
+    url: https://github.com/gp-juit/flutter_funnel_test.git
+```
+
 ### 2. Wire Your Analytics (3 lines)
 
-Add this check to your existing analytics service — works with any SDK:
+Add this to your existing analytics service — works with any SDK:
 
 ```dart
 import 'package:flutter_funnel_test/flutter_funnel_test.dart';
 
 class MyAnalyticsService {
   static void track(String event, [Map<String, dynamic>? props]) {
-    // This line enables funnel testing
     if (TestableAnalytics.isEnabled) TestableAnalytics.capture(event, props);
-
-    // Your real SDK call (Mixpanel, Firebase, Amplitude, etc.)
-    _mixpanel.track(event, properties: props);
+    _sdk.track(event, properties: props);  // Your real SDK
   }
 }
 ```
 
-### 3. Define Funnels in YAML
+### 3. Use It
 
-Create `test/funnels/my_funnels.yaml`:
-
-```yaml
-funnels:
-  - name: "User Signup"
-    description: "New user signs up via email"
-    mode: ordered
-    tags: [auth, critical]
-    events:
-      - name: signup_screen_view
-        description: "Signup screen loads"
-      - name: email_entered
-        properties:
-          valid: true
-      - name: signup_button_click
-      - name: signup_success
-        properties:
-          method: email
-
-  - name: "Add to Cart"
-    description: "User browses and adds item"
-    mode: ordered
-    tags: [ecommerce]
-    events:
-      - name: product_list_view
-      - name: product_card_click
-        properties:
-          product_id: "123"
-      - name: add_to_cart_click
+**With AI Agent (Claude Code):**
+```
+/list-events                                          # See all your events
+/test-funnel signup: signup_view -> signup_success     # Test a funnel
 ```
 
-### 4. Write Tests
+**With YAML (no agent):**
 
+Create `test/funnels/my_funnels.yaml`:
+```yaml
+funnels:
+  - name: "Signup"
+    mode: ordered
+    tags: [auth]
+    events:
+      - name: signup_view
+      - name: email_entered
+        properties: { valid: true }
+      - name: signup_success
+```
+
+Create `test/funnels/my_funnel_test.dart`:
 ```dart
-import 'dart:io';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_funnel_test/flutter_funnel_test.dart';
 
 void main() {
-  late List<YamlFunnelDefinition> funnels;
-
-  setUpAll(() {
-    funnels = parseYamlFunnels(
-      File('test/funnels/my_funnels.yaml').readAsStringSync(),
-    );
-  });
-
-  test('User Signup funnel validates', () {
-    simulateAndValidateFunnel(
-      funnels.firstWhere((f) => f.name == 'User Signup'),
-    );
-  });
-
-  test('Add to Cart funnel validates', () {
-    simulateAndValidateFunnel(
-      funnels.firstWhere((f) => f.name == 'Add to Cart'),
-    );
-  });
+  testYamlFunnels('test/funnels/my_funnels.yaml');
 }
 ```
 
-### 5. Run
-
+Run:
 ```bash
 flutter test test/funnels/
 ```
 
 ---
 
-## Integration Tests (on Emulator)
+## AI Agent Commands
 
-Test real UI with taps, scrolls, typed text, screenshots, and analytics assertions.
+### `/test-funnel`
 
-```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
-import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
+Test a funnel on device with screen recording.
 
-void main() {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  testWidgets('signup funnel on device', (tester) async {
-    TestableAnalytics.enable();
-    final ft = FunnelTester(tester, binding);
-
-    await tester.pumpWidget(MyApp());
-    await ft.settle();
-
-    await ft.step('Enter email', action: () async {
-      await ft.typeByHint('Email', 'user@test.com');
-    }, expectEvents: ['email_entered']);
-
-    await ft.step('Tap signup', action: () async {
-      await ft.tapButton('Sign Up');
-    }, expectEvents: ['signup_success']);
-
-    // Assert entire funnel sequence
-    ft.expectFunnel([
-      'signup_screen_view',
-      'email_entered',
-      'signup_success',
-    ]);
-
-    await ft.screenshot('signup_complete');
-    ft.printReport('Signup Funnel');
-  });
-}
+```
+/test-funnel checkout: cart_view -> checkout_start -> payment_success
+/test-funnel signup: signup_view -> email_entered -> signup_success
+/test-funnel onboarding: welcome_view -> step1_complete -> step2_complete
 ```
 
-Run on emulator:
+**What it does:**
+1. Parses event names from your input
+2. Searches your codebase to map events to UI actions
+3. Generates YAML + Dart test files
+4. Starts screen recording (iOS: `xcrun simctl`, Android: `adb screenrecord`)
+5. Runs `flutter test` on the connected device
+6. Stops recording, saves report + video to `test_reports/`
 
-```bash
-flutter test integration_test/signup_test.dart
+### `/list-events`
+
+Shows all analytics events defined in your app, grouped by category.
+
+```
+/list-events
 ```
 
 ---
 
-## Programmatic Funnels
+## Device Funnel YAML
 
-Define funnels in Dart code for testing business logic:
+For UI tests that run on emulator with screen recording:
+
+```yaml
+device_funnels:
+  - name: "Checkout Flow"
+    description: "User completes purchase"
+    start_route: /
+    steps:
+      - name: "Home screen"
+        action: screenshot
+        screenshot: home
+
+      - name: "Tap Cart tab"
+        action: tap_nav
+        target: "Cart"
+        expect_event: cart_view
+        screenshot: cart
+
+      - name: "Tap Checkout"
+        action: tap_button
+        target: "Checkout"
+        expect_event: checkout_start
+        screenshot: checkout
+
+      - name: "Scroll to payment"
+        action: scroll_down
+        screenshot: payment
+```
+
+### Available Actions
+
+| action | target | value | What it does |
+|--------|--------|-------|-------------|
+| `tap_nav` | "Tab Label" | — | Tap bottom navigation item |
+| `tap_button` | "Button Text" | — | Tap ElevatedButton |
+| `tap_text` | "Any text" | — | Tap any text widget |
+| `type` | "TextField" or hint | "text to type" | Type into field |
+| `scroll_down` | — | — | Scroll page down |
+| `scroll_up` | — | — | Scroll page up |
+| `wait` | — | "2000" | Wait N milliseconds |
+| `screenshot` | — | — | Take screenshot only |
+
+Each step can also have `expect_event`, `expect_text`, and `screenshot`.
+
+### Run Device Funnels
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+// integration_test/run_all.dart
+import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
+import 'test_app.dart';
 
-final loginFunnel = FunnelDefinition(
-  name: 'Login Flow',
-  description: 'User logs in with email',
-  tags: ['auth'],
-  steps: [
-    FunnelStep(
-      name: 'Enter credentials',
-      description: 'User types email and password',
-      action: () async {
-        controller.setEmail('user@test.com');
-        controller.setPassword('password123');
-      },
-      assertions: () async {
-        expect(controller.isFormValid, isTrue);
-        return {'formValid': true};
-      },
-    ),
-    FunnelStep(
-      name: 'Submit login',
-      description: 'User taps login button',
-      action: () async {
-        await controller.login();
-      },
-      assertions: () async {
-        expect(controller.isLoggedIn, isTrue);
-        return {'loggedIn': true};
-      },
-    ),
-  ],
-);
+const funnels = '''
+device_funnels:
+  - name: "My Flow"
+    start_route: /
+    steps:
+      - name: "Home"
+        action: screenshot
+        screenshot: home
+''';
 
-// Run it
-test('login funnel', () async {
-  final result = await loginFunnel.run();
-  print(result.detailedReport);
-  expect(result.allPassed, isTrue);
-});
+void main() {
+  runDeviceFunnels(
+    yamlContent: funnels,
+    appBuilder: ({String? initialRoute}) =>
+        createTestApp(initialRoute: initialRoute),
+  );
+}
+```
+
+```bash
+flutter test integration_test/run_all.dart -d <device_id>
+```
+
+---
+
+## Analytics Funnel YAML
+
+For logic tests that validate event sequences (no device needed, runs in <1s):
+
+```yaml
+funnels:
+  - name: "Signup"
+    description: "New user signs up"
+    mode: ordered
+    tags: [auth, critical]
+    events:
+      - name: signup_view
+      - name: email_entered
+        properties:
+          valid: true
+      - name: signup_success
+        properties:
+          method: email
+```
+
+**Modes:**
+- `ordered` — events must fire in this order, other events can appear between them
+- `strict` — only these exact events fire, nothing else
+
+---
+
+## Auto-Generated Reports
+
+Every test run produces a timestamped report in `test_reports/`:
+
+```
+═══════════════════════════════════════════════
+  FUNNEL TEST REPORT
+═══════════════════════════════════════════════
+
+Source:    my_funnels.yaml
+Timestamp: 2026-04-03T22-08-54
+Funnels:   3
+
+[PASS] Signup Flow
+  Events: signup_view -> email_entered -> signup_success
+    - signup_view
+    - email_entered {valid: true}
+    - signup_success {method: email}
+
+[PASS] Checkout Flow
+  Events: cart_view -> checkout_start -> payment_success
+
+───────────────────────────────────────────────
+SUMMARY
+  Total:  3
+  Passed: 3
+  Failed: 0
+  Result: ALL PASSED
+───────────────────────────────────────────────
 ```
 
 ---
 
 ## Coverage Report
 
-See which analytics events are covered by your funnels:
+See which analytics events have funnel coverage:
 
 ```dart
 final report = FunnelReport.coverageReport(
@@ -242,8 +327,6 @@ final report = FunnelReport.coverageReport(
 );
 print(report);
 ```
-
-Output:
 
 ```
 === Analytics Event Coverage ===
@@ -258,132 +341,87 @@ Uncovered events:
 
 ---
 
-## API Reference
-
-### Imports
-
-```dart
-// For unit tests (no device needed)
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
-
-// For integration tests on emulator (adds FunnelTester)
-import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
-```
-
-### Analytics Layer
-
-| Class | Purpose |
-|-------|---------|
-| `AnalyticsAdapter` | Abstract class — implement for your analytics SDK |
-| `AnalyticsCapture` | Unit test event recorder — `track()`, `assertFunnel()`, `dump()` |
-| `TestableAnalytics` | On-device capture — wire into your service with `isEnabled` check |
-| `FunnelValidationResult` | Result of funnel assertion — `passed`, `missingEvents`, `report` |
-| `CapturedEvent` | Single captured event — `name`, `properties`, `timestamp` |
-
-### Funnel Framework
-
-| Class | Purpose |
-|-------|---------|
-| `FunnelDefinition` | Sequence of steps forming a user journey — `run()` |
-| `FunnelStep` | Single step — `action`, `assertions`, `precondition` |
-| `FunnelResult` | Execution result — `allPassed`, `detailedReport` |
-| `StepResult` | Single step result — `passed`, `errorMessage`, `stateSnapshot` |
-| `FunnelRegistry` | Register and batch-execute funnels — `runAll()`, `getByTag()` |
-
-### YAML Funnels
-
-| Function / Class | Purpose |
-|------------------|---------|
-| `parseYamlFunnels(String)` | Parse YAML into funnel definitions |
-| `simulateAndValidateFunnel(funnel)` | Fire events and validate sequence |
-| `validateFunnelAgainstCapture(funnel)` | Validate against already-captured events |
-| `YamlFunnelDefinition` | Parsed funnel — `name`, `events`, `mode`, `tags` |
-| `ExpectedEvent` | Expected event — `name`, `properties`, `description` |
-
-### Integration Testing
-
-| Class | Purpose |
-|-------|---------|
-| `FunnelTester` | Wraps `WidgetTester` — `step()`, `tap()`, `tapButton()`, `enterText()`, `typeByHint()`, `scrollDown()`, `screenshot()`, `expectEvent()`, `expectFunnel()` |
-| `StepScreenshot` | Screenshot metadata |
-
-### Reports
-
-| Class | Purpose |
-|-------|---------|
-| `FunnelReport` | `coverageReport()`, `fromValidationResults()`, `fromFunnelResults()` |
-
----
-
-## YAML Funnel Format
-
-```yaml
-funnels:
-  - name: "Funnel Name"              # Required
-    description: "What it tests"      # Optional
-    mode: ordered                     # "ordered" (default) or "strict"
-    tags: [tag1, tag2]                # Optional, for filtering
-    events:
-      - name: event_name              # Required — your analytics event name
-        properties:                   # Optional — assert these properties
-          key: value
-          another_key: true
-        description: "What triggers"  # Optional — documentation
-```
-
-**Modes:**
-- `ordered` — events must fire in this order, but other events can appear between them
-- `strict` — only these exact events fire, nothing else
-
----
-
-## Extending FunnelTester
-
-Add app-specific widget finders by subclassing:
-
-```dart
-import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
-import 'package:my_app/widgets/my_button.dart';
-
-class MyAppTester extends FunnelTester {
-  MyAppTester(super.tester, super.binding);
-
-  Finder myButton(String text) => find.widgetWithText(MyButton, text);
-
-  Future<void> tapMyButton(String text) async => tap(myButton(text));
-}
-```
-
----
-
 ## Adapter Examples
 
 ### Mixpanel
-
 ```dart
 if (TestableAnalytics.isEnabled) TestableAnalytics.capture(event.name, props);
 _mixpanel.track(event.name, properties: props);
 ```
 
 ### Firebase Analytics
-
 ```dart
 if (TestableAnalytics.isEnabled) TestableAnalytics.capture(name, params);
 _firebaseAnalytics.logEvent(name: name, parameters: params);
 ```
 
 ### Amplitude
-
 ```dart
 if (TestableAnalytics.isEnabled) TestableAnalytics.capture(event, props);
 _amplitude.logEvent(event, eventProperties: props);
 ```
 
 ### PostHog
-
 ```dart
 if (TestableAnalytics.isEnabled) TestableAnalytics.capture(event, props);
 _posthog.capture(eventName: event, properties: props);
+```
+
+---
+
+## API Reference
+
+### Imports
+
+```dart
+import 'package:flutter_funnel_test/flutter_funnel_test.dart';               // Unit tests
+import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';    // Device tests
+```
+
+### Core Classes
+
+| Class | Purpose |
+|-------|---------|
+| `TestableAnalytics` | On-device analytics capture — `enable()`, `capture()`, `assertFunnel()` |
+| `AnalyticsCapture` | Unit test event recorder — `track()`, `assertFunnel()`, `dump()` |
+| `FunnelTester` | Wraps `WidgetTester` — `step()`, `tap()`, `enterText()`, `screenshot()`, `expectEvent()` |
+| `FunnelDefinition` | Programmatic funnel — `run()` returns `FunnelResult` |
+| `FunnelRegistry` | Batch execute funnels — `runAll()`, `getByTag()` |
+| `FunnelReport` | Generate coverage and validation reports |
+
+### Key Functions
+
+| Function | Purpose |
+|----------|---------|
+| `testYamlFunnels(path)` | Auto-generate tests from YAML — 4-line test file |
+| `parseYamlFunnels(content)` | Parse analytics YAML funnels |
+| `parseDeviceFunnels(content)` | Parse device YAML funnels |
+| `runDeviceFunnels(yaml, appBuilder)` | Run device funnels from YAML |
+| `simulateAndValidateFunnel(funnel)` | Validate a single funnel |
+
+---
+
+## Skill / Plugin Structure
+
+```
+flutter_funnel_test/
+├── .claude-plugin/
+│   └── plugin.json                    # Plugin manifest
+├── skills/
+│   └── funnel-test/
+│       ├── SKILL.md                   # AI agent brain
+│       └── references/
+│           └── yaml-schema.md         # YAML action reference
+├── commands/
+│   ├── test-funnel.md                 # /test-funnel slash command
+│   └── list-events.md                 # /list-events slash command
+├── hooks/
+│   ├── hooks.json                     # SessionStart hook config
+│   └── scripts/
+│       └── setup.sh                   # Auto-installs package on first session
+├── lib/                               # Flutter package source
+├── test/                              # 23 package tests
+└── example/                           # Example app + commands
 ```
 
 ---
