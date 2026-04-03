@@ -12,27 +12,27 @@ import 'funnel_tester.dart';
 /// YAML format:
 /// ```yaml
 /// device_funnels:
-///   - name: "QARA Chat"
-///     description: "User chats with QARA"
+///   - name: "Checkout Flow"
+///     description: "User completes purchase"
 ///     start_route: /
 ///     steps:
-///       - name: "Tap QARA tab"
+///       - name: "Tap Cart tab"
 ///         action: tap_nav
-///         target: "QARA"
-///         expect_event: nav_qara_click
-///         screenshot: qara_screen
-///       - name: "Type message"
-///         action: type
-///         target: TextField
-///         value: "My baby cries at night"
-///         screenshot: qara_typed
+///         target: "Cart"
+///         expect_event: cart_view
+///         screenshot: cart_screen
+///       - name: "Tap Checkout"
+///         action: tap_button
+///         target: "Checkout"
+///         expect_event: checkout_start
+///         screenshot: checkout_screen
 /// ```
 ///
 /// Test file (only code needed):
 /// ```dart
 /// void main() {
 ///   runDeviceFunnels(
-///     yamlPath: 'test/funnels/qara_device.yaml',
+///     yamlPath: 'test/funnels/checkout_device.yaml',
 ///     appBuilder: () => createTestApp(),
 ///   );
 /// }

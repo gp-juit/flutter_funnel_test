@@ -28,25 +28,19 @@ Print them grouped by category (based on comments in the file), like:
 Available Analytics Events for Funnel Testing
 ══════════════════════════════════════════════
 
-Login & Onboarding:
-  login_splash_view
+Auth:
+  signup_screen_view
   login_screen_view
-  phone_input_click
-  phone_continue_click
-  otp_input_click
-  otp_verify_click
-  otp_validation
-  login_successful
+  login_success
   ...
 
 Navigation:
   nav_home_click
-  nav_foryou_click
-  nav_cry_click
-  nav_qara_click
+  nav_settings_click
+  nav_profile_click
   ...
 
 Usage:
-  /test-funnel QARA chat: nav_qara_click -> qara_message_send_click
-  /test-funnel login: login_screen_view -> phone_continue_click -> otp_verify_click
+  /test-funnel signup: signup_screen_view -> email_entered -> signup_success
+  /test-funnel checkout: cart_view -> checkout_start -> payment_success
 ```

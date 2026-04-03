@@ -1,0 +1,12 @@
+{
+  "name": "flutter-funnel-test",
+  "version": "1.0.0",
+  "description": "AI agent that tests Flutter app funnels. PM types event names, agent runs tests on device with screen recording and reports.",
+  "author": {
+    "name": "Gurpreet Singh",
+    "url": "https://github.com/gp-juit"
+  },
+  "repository": "https://github.com/gp-juit/flutter_funnel_test",
+  "license": "MIT",
+  "keywords": ["flutter", "testing", "funnel", "analytics", "mixpanel", "firebase", "integration-test", "screen-recording"]
+}

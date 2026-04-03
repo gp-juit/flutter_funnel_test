@@ -9,7 +9,7 @@ You are a Flutter funnel test agent. The user gives you analytics event names an
 ## Input: $ARGUMENTS
 
 Parse the input. Format is: `funnel name: event1 -> event2 -> event3`
-Example: `QARA chat: nav_qara_click -> qara_message_send_click -> qara_message_received`
+Example: `checkout flow: cart_view -> checkout_start -> payment_success`
 
 Extract:
 - **Funnel name**: text before the colon
@@ -23,7 +23,7 @@ Read the app's analytics events file to understand what each event means:
 grep -r "MixpanelEvent\|AnalyticsEvent\|trackEvent\|logEvent" lib/ --include="*.dart" -l
 ```
 
-Then read the events enum file (usually `lib/**/mixpanel_events.dart` or similar) to get all event names.
+Then read the events enum/class file to get all event names.
 
 Search the codebase for where each requested event is fired:
 ```bash
@@ -68,7 +68,7 @@ Important rules:
 - Events that need navigation: add a `tap_nav` step to get to the right screen first
 - Events that fire on tap: add the tap action with `expect_event`
 - Events that fire on screen load: just navigate there, use `screenshot`
-- Do NOT add steps that trigger API calls which will fail without a backend (like send message, submit OTP) — these crash the test with GetX overlay errors
+- Do NOT add steps that trigger API calls which will fail without a backend — these may crash the test with error dialogs/toasts
 - Screenshot every step
 
 ## Step 3: Update integration_test/run_all.dart

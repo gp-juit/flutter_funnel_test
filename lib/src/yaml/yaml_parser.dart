@@ -197,11 +197,11 @@ List<String> _extractList(String line, String key) {
 ///     start_route: /home
 ///     tags: [feature]
 ///     steps:
-///       - name: "Tap QARA"
+///       - name: "Tap Profile"
 ///         action: tap_nav
-///         target: "QARA"
-///         expect_event: nav_qara_click
-///         screenshot: qara_screen
+///         target: "Profile"
+///         expect_event: nav_profile_click
+///         screenshot: profile_screen
 /// ```
 List<YamlDeviceFunnel> parseDeviceFunnels(String yamlContent) {
   final funnels = <YamlDeviceFunnel>[];
