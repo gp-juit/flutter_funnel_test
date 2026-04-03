@@ -2,7 +2,6 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![GitHub](https://img.shields.io/badge/GitHub-gp--juit-181717?style=for-the-badge&logo=github)](https://github.com/gp-juit/flutter_funnel_test)
 
 ![Tests](https://img.shields.io/badge/tests-23%20passing-brightgreen?style=flat-square&logo=checkmarx)
@@ -432,14 +431,6 @@ Contributions are welcome! Feel free to open issues and pull requests.
 
 [![GitHub Issues](https://img.shields.io/badge/Issues-Open%20One-red?style=flat-square&logo=github)](https://github.com/gp-juit/flutter_funnel_test/issues)
 [![GitHub PRs](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square&logo=github)](https://github.com/gp-juit/flutter_funnel_test/pulls)
-
----
-
-## License
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
