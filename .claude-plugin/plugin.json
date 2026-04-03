@@ -6,7 +6,7 @@
     "name": "Gurpreet Singh",
     "url": "https://github.com/gp-juit"
   },
-  "repository": "https://github.com/gp-juit/flutter_funnel_test",
+  "repository": "https://github.com/gp-juit/funnelwise",
   "license": "MIT",
   "keywords": ["flutter", "testing", "funnel", "analytics", "mixpanel", "firebase", "integration-test", "screen-recording"]
 }

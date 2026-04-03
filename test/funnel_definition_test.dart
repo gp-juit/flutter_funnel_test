@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+import 'package:funnelwise/funnelwise.dart';
 
 void main() {
   group('FunnelDefinition', () {

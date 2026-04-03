@@ -194,7 +194,7 @@
       "languageVersion": "3.1"
     },
     {
-      "name": "flutter_funnel_test",
+      "name": "funnelwise",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.0"

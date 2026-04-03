@@ -76,7 +76,7 @@ Important rules:
 Write the generated YAML into `integration_test/run_all.dart`:
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
+import 'package:funnelwise/funnelwise_integration.dart';
 import 'test_app.dart';
 
 const funnels = '''
@@ -176,7 +176,7 @@ Tell the user:
 In addition to the device test, also generate `test/funnels/{funnel_name}_funnels.yaml` with the analytics event sequence and a test file that uses `testYamlFunnels()`:
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+import 'package:funnelwise/funnelwise.dart';
 
 void main() {
   testYamlFunnels('test/funnels/{funnel_name}_funnels.yaml');

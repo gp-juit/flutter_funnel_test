@@ -1,8 +1,8 @@
-# flutter_funnel_test
+# funnelwise
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
-[![GitHub](https://img.shields.io/badge/GitHub-gp--juit-181717?style=for-the-badge&logo=github)](https://github.com/gp-juit/flutter_funnel_test)
+[![GitHub](https://img.shields.io/badge/GitHub-gp--juit-181717?style=for-the-badge&logo=github)](https://github.com/gp-juit/funnelwise)
 
 ![Tests](https://img.shields.io/badge/tests-23%20passing-brightgreen?style=flat-square&logo=checkmarx)
 ![Dependencies](https://img.shields.io/badge/external%20deps-0-brightgreen?style=flat-square)
@@ -71,9 +71,9 @@ Then add the 3-line analytics hook (one-time, see [Wire Analytics](#2-wire-your-
 dev_dependencies:
   integration_test:
     sdk: flutter
-  flutter_funnel_test:
+  funnelwise:
     git:
-      url: https://github.com/gp-juit/flutter_funnel_test.git
+      url: https://github.com/gp-juit/funnelwise.git
 ```
 
 ```bash
@@ -89,9 +89,9 @@ flutter pub get
 Add to `pubspec.yaml` dev_dependencies (or let the skill hook do it):
 
 ```yaml
-flutter_funnel_test:
+funnelwise:
   git:
-    url: https://github.com/gp-juit/flutter_funnel_test.git
+    url: https://github.com/gp-juit/funnelwise.git
 ```
 
 ### 2. Wire Your Analytics (3 lines)
@@ -99,7 +99,7 @@ flutter_funnel_test:
 Add this to your existing analytics service — works with any SDK:
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+import 'package:funnelwise/funnelwise.dart';
 
 class MyAnalyticsService {
   static void track(String event, [Map<String, dynamic>? props]) {
@@ -134,7 +134,7 @@ funnels:
 
 Create `test/funnels/my_funnel_test.dart`:
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+import 'package:funnelwise/funnelwise.dart';
 
 void main() {
   testYamlFunnels('test/funnels/my_funnels.yaml');
@@ -228,7 +228,7 @@ Each step can also have `expect_event`, `expect_text`, and `screenshot`.
 
 ```dart
 // integration_test/run_all.dart
-import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
+import 'package:funnelwise/funnelwise_integration.dart';
 import 'test_app.dart';
 
 const funnels = '''
@@ -373,8 +373,8 @@ _posthog.capture(eventName: event, properties: props);
 ### Imports
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';               // Unit tests
-import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';    // Device tests
+import 'package:funnelwise/funnelwise.dart';               // Unit tests
+import 'package:funnelwise/funnelwise_integration.dart';    // Device tests
 ```
 
 ### Core Classes
@@ -403,7 +403,7 @@ import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';    //
 ## Skill / Plugin Structure
 
 ```
-flutter_funnel_test/
+funnelwise/
 ├── .claude-plugin/
 │   └── plugin.json                    # Plugin manifest
 ├── skills/
@@ -429,13 +429,13 @@ flutter_funnel_test/
 
 Contributions are welcome! Feel free to open issues and pull requests.
 
-[![GitHub Issues](https://img.shields.io/badge/Issues-Open%20One-red?style=flat-square&logo=github)](https://github.com/gp-juit/flutter_funnel_test/issues)
-[![GitHub PRs](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square&logo=github)](https://github.com/gp-juit/flutter_funnel_test/pulls)
+[![GitHub Issues](https://img.shields.io/badge/Issues-Open%20One-red?style=flat-square&logo=github)](https://github.com/gp-juit/funnelwise/issues)
+[![GitHub PRs](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square&logo=github)](https://github.com/gp-juit/funnelwise/pulls)
 
 ---
 
 <p align="center">
   Built with <img src="https://img.shields.io/badge/Dart-%230175C2.svg?style=flat&logo=dart&logoColor=white" height="16"/> by <strong><a href="https://github.com/gp-juit">Gurpreet Singh</a></strong>
   <br/>
-  <sub>If this package helps you, consider giving it a <a href="https://github.com/gp-juit/flutter_funnel_test">star</a>!</sub>
+  <sub>If this package helps you, consider giving it a <a href="https://github.com/gp-juit/funnelwise">star</a>!</sub>
 </p>

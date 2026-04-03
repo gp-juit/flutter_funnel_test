@@ -1,5 +1,5 @@
 {
-  "description": "Auto-setup flutter_funnel_test package on session start",
+  "description": "Auto-setup funnelwise package on session start",
   "hooks": {
     "SessionStart": [
       {

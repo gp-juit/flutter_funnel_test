@@ -1,4 +1,4 @@
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+import 'package:funnelwise/funnelwise.dart';
 
 /// Example: wiring TestableAnalytics into your analytics service.
 ///

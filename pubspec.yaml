@@ -1,4 +1,4 @@
-name: flutter_funnel_test
+name: funnelwise
 description: A generic framework for testing UI, business logic, and analytics across user funnels in any Flutter app. Define funnels in YAML, validate event sequences, and run integration tests on emulators with screenshots.
 version: 1.0.0
 

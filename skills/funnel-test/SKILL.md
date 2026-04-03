@@ -35,10 +35,10 @@ list events
 
 ### Package installed?
 
-Check if `flutter_funnel_test` is in `pubspec.yaml`:
+Check if `funnelwise` is in `pubspec.yaml`:
 
 ```bash
-grep -q "flutter_funnel_test" pubspec.yaml
+grep -q "funnelwise" pubspec.yaml
 ```
 
 If NOT found, add it:
@@ -51,9 +51,9 @@ Add these lines under `dev_dependencies:`:
 ```yaml
   integration_test:
     sdk: flutter
-  flutter_funnel_test:
+  funnelwise:
     git:
-      url: https://github.com/gp-juit/flutter_funnel_test.git
+      url: https://github.com/gp-juit/funnelwise.git
 ```
 
 Then run `flutter pub get`.
@@ -75,7 +75,7 @@ grep -rl "trackEvent\|track(" lib/ --include="*.dart" | head -5
 Read that file and add the 3-line hook:
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+import 'package:funnelwise/funnelwise.dart';
 ```
 
 Inside the `trackEvent` / `track` method, add before the real SDK call:
@@ -176,7 +176,7 @@ device_funnels:
 Update `integration_test/run_all.dart`:
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
+import 'package:funnelwise/funnelwise_integration.dart';
 import 'test_app.dart';
 
 const funnels = '''
@@ -207,7 +207,7 @@ funnels:
 And `test/funnels/{name}_funnel_test.dart`:
 
 ```dart
-import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+import 'package:funnelwise/funnelwise.dart';
 
 void main() {
   testYamlFunnels('test/funnels/{name}_funnels.yaml');

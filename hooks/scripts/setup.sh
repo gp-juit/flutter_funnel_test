@@ -1,5 +1,5 @@
 #!/bin/bash
-# Auto-setup flutter_funnel_test when plugin is installed.
+# Auto-setup funnelwise when plugin is installed.
 # Runs on SessionStart — checks if Flutter project, adds package if missing.
 
 set -euo pipefail
@@ -14,9 +14,9 @@ fi
 
 CHANGED=false
 
-# 1. Add flutter_funnel_test if not present
-if ! grep -q "flutter_funnel_test" pubspec.yaml 2>/dev/null; then
-  echo '{"status": "installing flutter_funnel_test package..."}' >&2
+# 1. Add funnelwise if not present
+if ! grep -q "funnelwise" pubspec.yaml 2>/dev/null; then
+  echo '{"status": "installing funnelwise package..."}' >&2
 
   # Find the dev_dependencies section and add the package
   if grep -q "dev_dependencies:" pubspec.yaml; then
@@ -25,17 +25,17 @@ if ! grep -q "flutter_funnel_test" pubspec.yaml 2>/dev/null; then
       sed -i.bak '/flutter_lints:.*/a\
   integration_test:\
     sdk: flutter\
-  flutter_funnel_test:\
+  funnelwise:\
     git:\
-      url: https://github.com/gp-juit/flutter_funnel_test.git' pubspec.yaml
+      url: https://github.com/gp-juit/funnelwise.git' pubspec.yaml
       rm -f pubspec.yaml.bak
     else
       sed -i.bak '/dev_dependencies:/a\
   integration_test:\
     sdk: flutter\
-  flutter_funnel_test:\
+  funnelwise:\
     git:\
-      url: https://github.com/gp-juit/flutter_funnel_test.git' pubspec.yaml
+      url: https://github.com/gp-juit/funnelwise.git' pubspec.yaml
       rm -f pubspec.yaml.bak
     fi
     CHANGED=true

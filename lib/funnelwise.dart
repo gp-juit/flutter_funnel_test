@@ -3,14 +3,14 @@
 ///
 /// Import this for unit tests (no device needed):
 /// ```dart
-/// import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+/// import 'package:funnelwise/funnelwise.dart';
 /// ```
 ///
 /// For integration tests on emulator, also import:
 /// ```dart
-/// import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
+/// import 'package:funnelwise/funnelwise_integration.dart';
 /// ```
-library flutter_funnel_test;
+library funnelwise;
 
 // Analytics
 export 'src/analytics/analytics_adapter.dart' show AnalyticsAdapter;

@@ -2,14 +2,14 @@
 ///
 /// Import this in files under `integration_test/`:
 /// ```dart
-/// import 'package:flutter_funnel_test/flutter_funnel_test_integration.dart';
+/// import 'package:funnelwise/funnelwise_integration.dart';
 /// ```
 ///
 /// Requires a running emulator or device.
-library flutter_funnel_test_integration;
+library funnelwise_integration;
 
 // Re-export the core library
-export 'flutter_funnel_test.dart';
+export 'funnelwise.dart';
 
 // Integration-specific
 export 'src/integration/funnel_tester.dart' show FunnelTester;

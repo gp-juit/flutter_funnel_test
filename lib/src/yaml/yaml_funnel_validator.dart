@@ -38,7 +38,7 @@ void simulateAndValidateFunnel(YamlFunnelDefinition funnel) {
 /// Generates a report to `test_reports/` after every run.
 ///
 /// ```dart
-/// import 'package:flutter_funnel_test/flutter_funnel_test.dart';
+/// import 'package:funnelwise/funnelwise.dart';
 ///
 /// void main() {
 ///   testYamlFunnels('test/funnels/my_funnels.yaml');
