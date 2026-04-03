@@ -1,0 +1,64 @@
+# Example funnel definitions for a generic app.
+# Copy this file, replace events with your analytics events.
+
+funnels:
+
+  - name: "User Signup"
+    description: "New user signs up via email"
+    mode: ordered
+    tags: [auth, critical]
+    events:
+      - name: signup_screen_view
+        description: "Signup screen loads"
+      - name: email_entered
+        properties:
+          valid: true
+        description: "User enters a valid email"
+      - name: password_entered
+        description: "User enters password"
+      - name: signup_button_click
+        description: "User taps Sign Up"
+      - name: signup_success
+        properties:
+          method: email
+        description: "Account created successfully"
+
+  - name: "User Login"
+    description: "Returning user logs in"
+    mode: ordered
+    tags: [auth, critical]
+    events:
+      - name: login_screen_view
+      - name: email_entered
+      - name: login_button_click
+      - name: login_success
+        properties:
+          method: email
+
+  - name: "Add to Cart"
+    description: "User browses and adds item to cart"
+    mode: ordered
+    tags: [ecommerce, engagement]
+    events:
+      - name: product_list_view
+      - name: product_card_click
+        properties:
+          product_id: "123"
+      - name: product_detail_view
+      - name: add_to_cart_click
+        properties:
+          product_id: "123"
+          quantity: 1
+
+  - name: "Checkout"
+    description: "User completes purchase"
+    mode: ordered
+    tags: [ecommerce, critical]
+    events:
+      - name: cart_view
+      - name: checkout_start
+      - name: payment_method_selected
+      - name: payment_success
+        properties:
+          currency: USD
+      - name: order_confirmation_view

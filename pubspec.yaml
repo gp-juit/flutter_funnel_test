@@ -1,0 +1,17 @@
+name: flutter_funnel_test
+description: A generic framework for testing UI, business logic, and analytics across user funnels in any Flutter app. Define funnels in YAML, validate event sequences, and run integration tests on emulators with screenshots.
+version: 1.0.0
+
+environment:
+  sdk: ^3.0.0
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+
+dev_dependencies:
+  integration_test:
+    sdk: flutter
