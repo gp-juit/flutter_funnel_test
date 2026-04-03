@@ -56,29 +56,20 @@ test_reports/
 
 ---
 
-## Setup
+## Install
 
-### Option A: Install as Claude Code Skill (Recommended)
-
-Copy the `.claude-plugin/`, `skills/`, `commands/`, and `hooks/` directories into your project's `.claude/` folder. On next session start, the hook auto-adds the package to your `pubspec.yaml`.
-
-Then add the 3-line analytics hook (one-time, see [Wire Analytics](#2-wire-your-analytics-3-lines) below).
-
-### Option B: Manual Install
-
-```yaml
-# pubspec.yaml
-dev_dependencies:
-  integration_test:
-    sdk: flutter
-  funnelwise:
-    git:
-      url: https://github.com/gp-juit/funnelwise.git
-```
+One command from your Flutter project root:
 
 ```bash
-flutter pub get
+curl -s https://raw.githubusercontent.com/gp-juit/funnelwise/main/install.sh | bash
 ```
+
+This does everything:
+- Adds `funnelwise` package to your `pubspec.yaml`
+- Runs `flutter pub get`
+- Installs `/test-funnel` and `/list-events` Claude Code commands
+- Creates `test_reports/`, `integration_test/`, `test/funnels/` directories
+- Adds `test_reports/` to `.gitignore`
 
 ---
 
