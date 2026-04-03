@@ -1,5 +1,19 @@
 # flutter_funnel_test
 
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![GitHub](https://img.shields.io/badge/GitHub-gp--juit-181717?style=for-the-badge&logo=github)](https://github.com/gp-juit/flutter_funnel_test)
+
+![Tests](https://img.shields.io/badge/tests-23%20passing-brightgreen?style=flat-square&logo=checkmarx)
+![Coverage](https://img.shields.io/badge/analytics%20coverage-80.6%25-blue?style=flat-square)
+![Dependencies](https://img.shields.io/badge/external%20deps-0-brightgreen?style=flat-square)
+![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20Android%20%7C%20Web-lightgrey?style=flat-square)
+![Dart Version](https://img.shields.io/badge/dart-%3E%3D3.0.0-blue?style=flat-square&logo=dart)
+![Flutter Version](https://img.shields.io/badge/flutter-%3E%3D3.10.0-blue?style=flat-square&logo=flutter)
+
+> **Analytics-agnostic** | **State management-agnostic** | **Zero external dependencies**
+
 A generic framework for testing **UI, business logic, and analytics** across user funnels in any Flutter app.
 
 Define funnels as YAML event sequences, validate analytics fire in the right order with correct properties, and run integration tests on emulators with screenshots — all from one package.
@@ -374,12 +388,25 @@ _posthog.capture(eventName: event, properties: props);
 
 ---
 
-## License
+## Contributing
 
-MIT License - Gurpreet Singh
+Contributions are welcome! Feel free to open issues and pull requests.
+
+[![GitHub Issues](https://img.shields.io/badge/Issues-Open%20One-red?style=flat-square&logo=github)](https://github.com/gp-juit/flutter_funnel_test/issues)
+[![GitHub PRs](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square&logo=github)](https://github.com/gp-juit/flutter_funnel_test/pulls)
 
 ---
 
-## Author
+## License
 
-**Gurpreet Singh** — [github.com/gp-juit](https://github.com/gp-juit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Built with <img src="https://img.shields.io/badge/Dart-%230175C2.svg?style=flat&logo=dart&logoColor=white" height="16"/> by <strong><a href="https://github.com/gp-juit">Gurpreet Singh</a></strong>
+  <br/>
+  <sub>If this package helps you, consider giving it a <a href="https://github.com/gp-juit/flutter_funnel_test">star</a>!</sub>
+</p>
